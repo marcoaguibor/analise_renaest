@@ -11,6 +11,12 @@ vtotal_nas <- function(dados){
   return(df)
 }
 
+#Separa os dados por unidade federativa
+dados_por_uf <- function(uf, dataset){
+  d <- dataset %>% filter(uf_acidente == uf )
+  return(d)
+}
+
 # TABELA CONJUNTO ACIDENTES #
 
 #Retorna o % de NAs por variável no conjunto Acidentes, em um vetor. Necessário transformar
