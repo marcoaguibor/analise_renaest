@@ -1,3 +1,5 @@
+# Cria arquivos temporarios para baixar o .zip e descompactar
+
 temp1 <- tempfile()
 temp2 <- tempfile()
 
@@ -8,6 +10,8 @@ download.file(
 )
 
 unzip(zipfile = temp1, exdir = temp2)
+
+# Carrega apenas o csv das vitimas e salva em um .rda para o uso no projeto
 
 vitimas <- readr::read_csv2(paste0(
   temp2,
