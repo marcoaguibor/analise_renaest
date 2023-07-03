@@ -41,7 +41,7 @@ arrange_acidentes <- function() {
     ))
 }
 
-# Aqui mesma coisa - da arrumar `vitimas` com as funções do `tidyverse`
+# Aqui mesma coisa - da pra arrumar `vitimas` com as funções do `tidyverse`
 
 arrange_vitimas <- function() {
   vitimas %>%
