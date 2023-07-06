@@ -8,6 +8,8 @@
 library(tidyverse)
 
 source("R/organizacao_dados.R")
+source("R/tabelas_perc_nas.R")
+# source("R/graficos_pna_sinistros_cv.R")
 
 # load --------------------------------------------------------------------
 
@@ -16,5 +18,18 @@ load("data/vitimas.rda")
 
 # arrange -----------------------------------------------------------------
 
-acidentes_limpo <- arrange_acidentes()
-vitimas_limpo <- arrange_vitimas()
+acidentes <- arrange_acidentes()
+vitimas <- arrange_vitimas()
+
+# table -------------------------------------------------------------------
+
+acidentes_na <- calc_na(acidentes)
+vitimas_na <- calc_na(vitimas)
+
+## Com o uso do `map` foi possivel criar um loop para calcular o NA
+## considerando cada UF
+
+acidentes_na_uf <- map(unique(acidentes$uf_acidente), ~calc_na(acidentes, .x))
+vitimas_na_uf <- map(unique(vitimas$uf_acidente), ~calc_na(vitimas, .x))
+
+acidentes_cv <- map(unique(acidentes$uf_acidente), ~calc_cv(acidentes, .x))
