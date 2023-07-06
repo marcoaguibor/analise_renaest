@@ -6,10 +6,14 @@
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
+library(showtext)
 
 source("R/organizacao_dados.R")
 source("R/tabelas_perc_nas.R")
-# source("R/graficos_pna_sinistros_cv.R")
+source("R/graficos_pna_sinistros_cv.R")
+
+font_add_google(name = "Fira Sans", family = "firasans")
+showtext_auto()
 
 # load --------------------------------------------------------------------
 
@@ -23,13 +27,21 @@ vitimas <- arrange_vitimas()
 
 # table -------------------------------------------------------------------
 
-acidentes_na <- calc_na(acidentes)
-vitimas_na <- calc_na(vitimas)
+# Com o uso do `map` foi possivel criar um loop para calcular o NA
+# considerando cada UF e o total do BR
 
-## Com o uso do `map` foi possivel criar um loop para calcular o NA
-## considerando cada UF
+lista_uf <- unique(acidentes$uf_acidente) # Lista dos UF
 
-acidentes_na_uf <- map(unique(acidentes$uf_acidente), ~calc_na(acidentes, .x))
-vitimas_na_uf <- map(unique(vitimas$uf_acidente), ~calc_na(vitimas, .x))
+acidentes_na_uf <- map(c("BR", lista_uf), ~calc_na(acidentes, .x))
+vitimas_na_uf <- map(c("BR", lista_uf), ~calc_na(vitimas, .x))
 
-acidentes_cv <- map(unique(acidentes$uf_acidente), ~calc_cv(acidentes, .x))
+# Aqui o `map` ajudou a calcular o cv para cada estado tambem
+
+acidentes_cv <- map(lista_uf, ~calc_cv(acidentes, .x))
+
+# plot --------------------------------------------------------------------
+
+grafico_pna_acidentes_uf <- map(acidentes_na_uf, plot_pna)
+grafico_pna_vitimas_uf <- map(vitimas_na_uf, plot_pna)
+
+

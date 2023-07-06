@@ -1,6 +1,6 @@
 # Sempre tente usar um verbo no nome da função
 
-# Aqui o `colSums` junto com o `is.na` ajuda a somar a quantidade de NA
+# Aqui o `colSums` junto com o `is.na` ajuda a somar a quantidade de NA por col
 # Depois é só dividir a quantidade de NA pela quantidade total de linhas na
 # tabela, com o uso do `nrow`.
 # Na mesma função ja da pra considerar o filtro por UF
@@ -11,7 +11,7 @@ calc_na <- function(df, uf = "ALL") {
   }
   na_count <- colSums(is.na(df))
   na_table <- tibble(var = names(na_count), na_qtde = na_count)
-  na_table %>% mutate(na_prop = na_qtde / nrow(df))
+  na_table %>% mutate(pna = na_qtde / nrow(df))
 }
 
 # Aqui foi calculado a quantidade de acidentes por UF e também a média e o CV
