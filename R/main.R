@@ -10,7 +10,7 @@ library(showtext)
 
 source("R/organizacao_dados.R")
 source("R/tabelas_perc_nas.R")
-source("R/graficos_pna_sinistros_cv.R")
+#source("R/graficos_pna_sinistros_cv.R")
 
 font_add_google(name = "Fira Sans", family = "firasans")
 showtext_auto()
@@ -44,4 +44,5 @@ acidentes_cv <- map(lista_uf, ~calc_cv(acidentes, .x))
 grafico_pna_acidentes_uf <- map(acidentes_na_uf, plot_pna)
 grafico_pna_vitimas_uf <- map(vitimas_na_uf, plot_pna)
 
+grafico_cv <- map(acidentes_cv, plot_cv_sinistros)
 

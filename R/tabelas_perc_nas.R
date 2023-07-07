@@ -5,29 +5,54 @@
 # tabela, com o uso do `nrow`.
 # Na mesma função ja da pra considerar o filtro por UF
 
-calc_na <- function(df, uf = "ALL") {
-  if (uf != "ALL") {
+calc_na <- function(df, uf = "BR") {
+  if (uf != "BR") {
     df <- df %>% filter(uf_acidente == uf)
   }
   na_count <- colSums(is.na(df))
   na_table <- tibble(var = names(na_count), na_qtde = na_count)
-  na_table %>% mutate(pna = na_qtde / nrow(df))
+  na_table %>% mutate(pna = na_qtde / nrow(df), uf = uf)
 }
 
 # Aqui foi calculado a quantidade de acidentes por UF e também a média e o CV
 # Deixei como entrada o df, mas pelo o que eu entendi o cv só foi calculado
 # para acidentes
 
-calc_cv <- function(df, uf = "ALL") {
-  if (uf != "ALL") {
-    df <- df %>% filter(uf_acidente == uf)
+calc_cv <- function(df, uf = "BR") {
+  if (uf != "BR") {
+    df <- df %>%
+      filter(uf_acidente == uf, ano_acidente != 2023) %>%
+      count(uf_acidente, ano_acidente)
+  } else {
+    df <- df %>%
+      filter(ano_acidente != 2023) %>%
+      count(ano_acidente) %>%
+      mutate(uf_acidente = "BR")
   }
   df %>%
-    filter(uf_acidente == uf, ano_acidente != 2023) %>%
-    count(uf_acidente, ano_acidente) %>%
     mutate(media = mean(n), cv = sd(n) / media) %>%
     nest(acidentes = c(ano_acidente, n))
 }
+
+# Por fim, função para criar uma tabela com todos os CV, incluindo o do BR
+
+join_cv <- function(df_uf, df_br) {
+    df_uf %>%
+      reduce(bind_rows) %>%
+      bind_rows(df_br)
+}
+
+# Aqui uma função para calcular o pna médio para o BR e os UFs
+
+calc_mean_pna <- function(pna_list) {
+  pna_list %>%
+    reduce(bind_rows) %>%
+    group_by(uf) %>%
+    summarise(pna = mean(pna)) %>%
+    arrange(-pna)
+}
+
+# Codigo antigo -----------------------------------------------------------
 
 # Constroi um dataframe com o % de NAs de cada variável
 # vtotal_nas <- function(dados){

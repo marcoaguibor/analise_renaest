@@ -26,24 +26,46 @@ plot_pna <- function(df) {
     scale_y_continuous(labels = scales::percent, limits = c(0, 1))
 }
 
-cv_label <- scales::percent(acidentes_cv[[1]]$cv, accuracy = 0.01, decimal.mark = ",")
-media_label <- round(acidentes_cv[[1]]$media, 0)
+# Além das mudanças que eu apliquei nos gráficos anteriores, aqui eu usei
+# o `annotate` junto com "label" para melhorar a visualização do texto.
+# Também deixei o limite mínimo de sinistros em 0, com o `limits` no
+# `scale_y_continuous`
 
-count_acidentes <- acidentes_cv[[1]] %>% unnest(acidentes)
+plot_cv_sinistros <- function(df) {
+  cv_label <- scales::percent(
+    df$cv,
+    accuracy = 0.01,
+    decimal.mark = ",",
+    big.mark = "."
+  )
 
-count_acidentes %>%
-  ggplot(aes(x = ano_acidente, y = n)) +
-  geom_point(size = 2, color = "#00496d") +
-  geom_line(color = "#00496d") +
-  geom_label(aes(label = n), nudge_y = max(count_acidentes$n) * 0.05) +
-  theme_minimal(base_family = "firasans") +
-  annotate(
-    "label",
-    x = 2021.5,
-    y = 0.1 * max(count_acidentes$n),
-    label = paste0("CV: ", cv_label, "\n", "Média: ", media_label)
-  ) +
-  scale_y_continuous(limits = c(0, NA))
+  media_label <- scales::number(round(df$media, 0), big.mark = ".")
+
+  count_acidentes <- df %>% unnest(acidentes)
+
+  count_acidentes %>%
+    ggplot(aes(x = ano_acidente, y = n)) +
+    geom_point(size = 2, color = "#00496d") +
+    geom_line(color = "#00496d") +
+    geom_label(
+      aes(label = scales::number(n, big.mark = '.', decimal.mark = ",")),
+      nudge_y = max(count_acidentes$n) * 0.05
+    ) +
+    theme_minimal(base_family = "firasans") +
+    annotate(
+      "label",
+      x = 2021.5,
+      y = 0.1 * max(count_acidentes$n),
+      label = paste0("CV: ", cv_label, "\n", "Média: ", media_label)
+    ) +
+    scale_y_continuous(
+      limits = c(0, NA),
+      labels = scales::label_number(big.mark = ".", decimal.mark = ",")
+    ) +
+    scale_x_continuous(minor_breaks = NULL) +
+    labs(x = "Ano", y = "Número de sinistros")
+}
+
 
 
 # Cálculo de percentual de campos não informados para cada variável por UF
