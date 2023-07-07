@@ -7,6 +7,7 @@
 
 library(tidyverse)
 library(showtext)
+library(gghighlight)
 
 source("R/organizacao_dados.R")
 source("R/tabelas_perc_nas.R")
@@ -38,6 +39,16 @@ vitimas_na_uf <- map(c("BR", lista_uf), ~calc_na(vitimas, .x))
 # Aqui o `map` ajudou a calcular o cv para cada estado tambem
 
 acidentes_cv <- map(lista_uf, ~calc_cv(acidentes, .x))
+acidentes_cv_br <- calc_cv(acidentes)
+
+# tabela com cv de todos uf e BR
+
+total_cv <- join_cv(acidentes_cv, acidentes_cv_br)
+
+# Tabela com as medias de pna por estado e BR
+
+pna_mean_acidentes <- calc_mean_pna(acidentes_na_uf)
+pna_mean_vitimas <- calc_mean_pna(vitimas_na_uf)
 
 # plot --------------------------------------------------------------------
 
@@ -46,3 +57,7 @@ grafico_pna_vitimas_uf <- map(vitimas_na_uf, plot_pna)
 
 grafico_cv <- map(acidentes_cv, plot_cv_sinistros)
 
+grafico_cv_total <- plot_cv_total(total_cv)
+
+grafico_pna_acidentes_mean <- plot_pna_mean(pna_mean_acidentes)
+grafico_pna_vitimas_mean <- plot_pna_mean(pna_mean_vitimas)

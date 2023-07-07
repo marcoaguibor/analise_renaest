@@ -66,7 +66,45 @@ plot_cv_sinistros <- function(df) {
     labs(x = "Ano", y = "Número de sinistros")
 }
 
+# Plotando o CV por UF e BR
+# Aqui eu decidi incluir o BR com uma cor diferente, com o auxilio do
+# `gghighlight`.
 
+plot_cv_total <- function(df) {
+  ggplot(df, aes(x = reorder(uf_acidente, cv), y = cv)) +
+    geom_segment(aes(xend = uf_acidente, yend = 0), color = "#00496d") +
+    geom_point(color = "#00496d", size = 2) +
+    gghighlight(
+      uf_acidente != "BR",
+      unhighlighted_params = list(color = "#f7951d", lty = "dashed")
+    ) +
+    coord_flip() +
+    theme_minimal(base_family = "firasans") +
+    scale_y_continuous(
+      breaks = seq(0, 1.25, 0.25),
+      minor_breaks = NULL,
+      labels = scales::percent
+    ) +
+    labs(x = "Localidade", y = "Coeficiente de Variação")
+}
+
+# Plotando o PNA por UF e BR, seguindo as diretrizes dos ultimos plots
+
+plot_pna_mean <- function(df) {
+  ggplot(df, aes(x = reorder(uf, pna), y = pna)) +
+    geom_segment(aes(xend = uf, yend = 0), color = "#00496d") +
+    geom_point(color = "#00496d", size = 2) +
+    gghighlight(
+      uf != "BR",
+      unhighlighted_params = list(color = "#f7951d", lty = "dashed")
+    ) +
+    scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+    coord_flip() +
+    theme_minimal(base_family = "firasans") +
+    labs(x = "Localidade", y = "Proporção de campos vazios")
+}
+
+# codigo antigo -----------------------------------------------------------
 
 # Cálculo de percentual de campos não informados para cada variável por UF
 # d1 <- vtotal_nas(dados_por_uf(uf))
