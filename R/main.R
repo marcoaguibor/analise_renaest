@@ -11,7 +11,8 @@ library(gghighlight)
 
 source("R/organizacao_dados.R")
 source("R/tabelas_perc_nas.R")
-#source("R/graficos_pna_sinistros_cv.R")
+source("R/graficos_pna_sinistros_cv.R")
+source("R/export.R")
 
 font_add_google(name = "Fira Sans", family = "firasans")
 showtext_auto()
@@ -61,3 +62,34 @@ grafico_cv_total <- plot_cv_total(total_cv)
 
 grafico_pna_acidentes_mean <- plot_pna_mean(pna_mean_acidentes)
 grafico_pna_vitimas_mean <- plot_pna_mean(pna_mean_vitimas)
+
+
+# export ------------------------------------------------------------------
+
+export_plots("pna_acidentes", grafico_pna_acidentes_uf)
+export_plots("pna_vitimas", grafico_pna_vitimas_uf)
+export_plots("cv_acidentes", grafico_cv)
+
+ggsave(
+  "plot/cv_acidentes_total.png",
+  grafico_cv_total,
+  dpi = 300,
+  width = 6,
+  height = 3.5
+)
+
+ggsave(
+  "plot/pna_acidentes_mean.png",
+  grafico_pna_acidentes_mean,
+  dpi = 300,
+  width = 6,
+  height = 3.5
+)
+
+ggsave(
+  "plot/pna_vitimas_mean.png",
+  grafico_pna_vitimas_mean,
+  dpi = 300,
+  width = 6,
+  height = 3.5
+)
