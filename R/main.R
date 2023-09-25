@@ -63,6 +63,8 @@ grafico_cv_total <- plot_cv_total(total_cv)
 grafico_pna_acidentes_mean <- plot_pna_mean(pna_mean_acidentes)
 grafico_pna_vitimas_mean <- plot_pna_mean(pna_mean_vitimas)
 
+grafico_pna_colisao <- plot_pna_colisao(tabela_colisao)
+
 
 # export ------------------------------------------------------------------
 
@@ -89,6 +91,14 @@ ggsave(
 ggsave(
   "plot/pna_vitimas_mean.png",
   grafico_pna_vitimas_mean,
+  dpi = 300,
+  width = 6,
+  height = 3.5
+)
+
+ggsave(
+  "plot/pna_colisoes.png",
+  grafico_pna_colisao,
   dpi = 300,
   width = 6,
   height = 3.5

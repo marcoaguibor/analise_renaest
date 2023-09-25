@@ -13,7 +13,7 @@ export_plots <- function(tipo, plot) {
   map2(
     path,
     plot,
-    ~ggsave(.x, .y, device = "png", dpi = 300, width = 6, height = 3.5)
+    ~ggsave(.x, .y, device = "png", dpi = 300, width = 7, height = 4)
   )
 
 }

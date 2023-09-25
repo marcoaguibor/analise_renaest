@@ -126,9 +126,33 @@ plot_pna_mean <- function(df) {
       base_size = 26,
       base_line_size = 0.5
     ) +
-    labs(x = "Localidade", y = "Percentual de campos não informados") +
-    theme(plot.background = element_rect(fill = "white", color = "white"))
+    labs(x = '', y ='', title = 'Campos não informados') +
+    theme(plot.background = element_rect(fill = "white", color = "white"),
+          plot.title = element_text(size = 18))
 }
+
+# Gráfico de colisões não especificadas por UF
+
+plot_pna_colisao <- function(df) {
+  ggplot(df, aes(x = reorder(uf, Perc_Col_NE), y = Perc_Col_NE)) +
+    geom_segment(aes(xend = uf, yend = 0), color = "#00496d") +
+    geom_point(color = "#00496d", size = 1.5) +
+    gghighlight(
+      uf != "BR",
+      unhighlighted_params = list(color = "#f7951d", lty = "dashed")
+    ) +
+    scale_y_continuous(labels = scales::percent, limits = c(0, 1)) +
+    coord_flip() +
+    theme_minimal(
+      base_family = "firasans",
+      base_size = 26,
+      base_line_size = 0.5
+    ) +
+    labs(x = '', y ='', title = 'Colisões não especificadas') +
+    theme(plot.background = element_rect(fill = "white", color = "white"),
+          plot.title = element_text(size = 18))
+}
+
 
 # codigo antigo -----------------------------------------------------------
 
