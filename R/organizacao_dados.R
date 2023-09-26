@@ -1,6 +1,13 @@
+library(tidyverse)
 # Aqui da pra usar as funções do `tidyverse`:
 # Use o `mutate` para modificar as colunas e o `select` para manter as
 # variáveis de interesse
+
+acidentes <- read_delim("C:/Users/manto/OneDrive/Área de Trabalho/ONSV/ANÁLISE RENAEST/DADOS ATUALIZADOS 18SET23/renaest_dabertos_20230912/Acidentes_DadosAbertos_20230912.csv",
+                           delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+vitimas <- read_delim("C:/Users/manto/OneDrive/Área de Trabalho/ONSV/ANÁLISE RENAEST/DADOS ATUALIZADOS 18SET23/renaest_dabertos_20230912/Vitimas_DadosAbertos_20230912.csv",
+                      delim = ";", escape_double = FALSE, trim_ws = TRUE)
 
 arrange_acidentes <- function() {
   acidentes %>%
@@ -40,7 +47,7 @@ arrange_acidentes <- function() {
       ind_acostamento
     ))
 }
-
+acidentes <- arrange_acidentes()
 # Aqui mesma coisa - da pra arrumar `vitimas` com as funções do `tidyverse`
 
 arrange_vitimas <- function() {
@@ -54,3 +61,5 @@ arrange_vitimas <- function() {
       faixa_idade
     ), ~if_else(.x == "NAO INFORMADO", NA, .x)))
 }
+vitimas <- arrange_vitimas()
+

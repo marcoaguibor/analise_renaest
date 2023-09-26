@@ -5,6 +5,12 @@
 # tabela, com o uso do `nrow`.
 # Na mesma função ja da pra considerar o filtro por UF
 
+# Função para filtrar os dados por UF
+dados_por_uf <- function(uf){
+  d <- acidentes %>% filter(uf_acidente == uf )
+  return(d)
+}
+
 calc_na <- function(df, uf = "BR") {
   if (uf != "BR") {
     df <- df %>% filter(uf_acidente == uf)
@@ -51,6 +57,35 @@ calc_mean_pna <- function(pna_list) {
     summarise(pna = mean(pna)) %>%
     arrange(-pna)
 }
+
+# Calcula a proporção de colisões não especificadas por UF
+
+calc_colisao_uf <- function(uf) {
+  if (uf == 'BR') {
+    counts <- table(factor(acidentes$tp_acidente))
+    valor_colisao <- ifelse('COLISAO' %in% names(counts), counts['COLISAO'], 0)
+  } else {
+    dados_uf <- dados_por_uf(uf)
+    counts <- table(factor(dados_uf$tp_acidente))
+    valor_colisao <- ifelse('COLISAO' %in% names(counts), counts['COLISAO'], 0)
+  }
+  proporcao_colisao_uf <- valor_colisao / sum(counts, na.rm = TRUE)
+  return(proporcao_colisao_uf)
+}
+
+calc_tabela_colisao <- function(){
+  df <- data.frame(uf = character(), Perc_Col_NE = numeric())
+  tp_colisao <- c('COLISAO', 'COLISAO FRONTAL', 'COLISAO TRASEIRA', 'COLISAO LATERAL',
+                  'COLISAO TRANSVERSAL', 'ENGAVAMENTO')
+  for (uf in lista_uf){
+    proporcao_colisao_uf <- calc_colisao1(uf)
+    df <- df %>% add_row(uf = uf, Perc_Col_NE = proporcao_colisao_uf)
+  }
+  df <- df %>% add_row(uf = 'BR', Perc_Col_NE = calc_colisao1('BR'))
+  return(df)
+}
+
+
 
 # Codigo antigo -----------------------------------------------------------
 
