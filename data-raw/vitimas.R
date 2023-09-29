@@ -18,4 +18,4 @@ vitimas <- readr::read_csv2(paste0(
   "/Vitimas_DadosAbertos_20230912.csv"
 ))
 
-save(vitimas, file = "vitimas.rda")
+save(vitimas, file = "data/vitimas.rda")
