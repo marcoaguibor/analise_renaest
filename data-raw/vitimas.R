@@ -15,10 +15,7 @@ unzip(zipfile = temp1, exdir = temp2)
 
 vitimas <- readr::read_csv2(paste0(
   temp2,
-  "/Vitimas_DadosAbertos_20230512.csv"
+  "/Vitimas_DadosAbertos_20230912.csv"
 ))
 
 save(vitimas, file = "vitimas.rda")
-
-vitimas <- read_delim("C:/Users/manto/OneDrive/Área de Trabalho/ONSV/ANÁLISE RENAEST/DADOS ATUALIZADOS 18SET23/renaest_dabertos_20230912/Vitimas_DadosAbertos_20230912.csv",
-                      delim = ";", escape_double = FALSE, trim_ws = TRUE)

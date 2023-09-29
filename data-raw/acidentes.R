@@ -15,7 +15,7 @@ unzip(zipfile = temp1, exdir = temp2)
 
 acidentes <- readr::read_csv2(paste0(
   temp2,
-  "/Acidentes_DadosAbertos_20230512.csv"
+  "/Acidentes_DadosAbertos_20230912.csv"
 ))
 
 save(acidentes, file = "data/acidentes.rda", compress = "bzip2")
