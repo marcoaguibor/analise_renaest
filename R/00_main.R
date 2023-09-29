@@ -1,17 +1,12 @@
-# Uma boa estrutura para se seguir em projetos é sempre criar um arquivo
-# `main.R` que carrega todas os dados e bibliotecas necessarias e cria o link
-# entre outros scripts do projeto, assim mantendo uma raiz. Isso facilita na
-# execução: quando precisar rodar o codigo, é só rodar o `main.R`
-
 # setup -------------------------------------------------------------------
 
 library(tidyverse)
 library(showtext)
 library(gghighlight)
 
-source("R/organizacao_dados.R")
-source("R/tabelas_perc_nas.R")
-source("R/graficos_pna_sinistros_cv.R")
+source("R/01_organizacao_dados.R")
+source("R/02_tabelas_perc_nas.R")
+source("R/03_graficos_pna_sinistros_cv.R")
 source("R/export.R")
 
 font_add_google(name = "Fira Sans", family = "firasans")
@@ -29,24 +24,15 @@ vitimas <- arrange_vitimas()
 
 # table -------------------------------------------------------------------
 
-# Com o uso do `map` foi possivel criar um loop para calcular o NA
-# considerando cada UF e o total do BR
-
 lista_uf <- unique(acidentes$uf_acidente) # Lista dos UF
 
 acidentes_na_uf <- map(c("BR", lista_uf), ~calc_na(acidentes, .x))
 vitimas_na_uf <- map(c("BR", lista_uf), ~calc_na(vitimas, .x))
 
-# Aqui o `map` ajudou a calcular o cv para cada estado tambem
-
 acidentes_cv <- map(lista_uf, ~calc_cv(acidentes, .x))
 acidentes_cv_br <- calc_cv(acidentes)
 
-# tabela com cv de todos uf e BR
-
 total_cv <- join_cv(acidentes_cv, acidentes_cv_br)
-
-# Tabela com as medias de pna por estado e BR
 
 pna_mean_acidentes <- calc_mean_pna(acidentes_na_uf)
 pna_mean_vitimas <- calc_mean_pna(vitimas_na_uf)
@@ -63,7 +49,7 @@ grafico_cv_total <- plot_cv_total(total_cv)
 grafico_pna_acidentes_mean <- plot_pna_mean(pna_mean_acidentes)
 grafico_pna_vitimas_mean <- plot_pna_mean(pna_mean_vitimas)
 
-grafico_pna_colisao <- plot_pna_colisao(tabela_colisao)
+# grafico_pna_colisao <- plot_pna_colisao(tabela_colisao)
 
 
 # export ------------------------------------------------------------------
@@ -96,10 +82,10 @@ ggsave(
   height = 3.5
 )
 
-ggsave(
-  "plot/pna_colisoes.png",
-  grafico_pna_colisao,
-  dpi = 300,
-  width = 6,
-  height = 3.5
-)
+# ggsave(
+#   "plot/pna_colisoes.png",
+#   grafico_pna_colisao,
+#   dpi = 300,
+#   width = 6,
+#   height = 3.5
+# )

@@ -1,11 +1,3 @@
-# Sempre tente usar um verbo no nome da função
-
-# Aqui o `colSums` junto com o `is.na` ajuda a somar a quantidade de NA por col
-# Depois é só dividir a quantidade de NA pela quantidade total de linhas na
-# tabela, com o uso do `nrow`.
-# Na mesma função ja da pra considerar o filtro por UF
-
-# Função para filtrar os dados por UF
 dados_por_uf <- function(uf){
   d <- acidentes %>% filter(uf_acidente == uf )
   return(d)
@@ -19,10 +11,6 @@ calc_na <- function(df, uf = "BR") {
   na_table <- tibble(var = names(na_count), na_qtde = na_count)
   na_table %>% mutate(pna = na_qtde / nrow(df), uf = uf)
 }
-
-# Aqui foi calculado a quantidade de acidentes por UF e também a média e o CV
-# Deixei como entrada o df, mas pelo o que eu entendi o cv só foi calculado
-# para acidentes
 
 calc_cv <- function(df, uf = "BR") {
   if (uf != "BR") {
@@ -40,15 +28,11 @@ calc_cv <- function(df, uf = "BR") {
     nest(acidentes = c(ano_acidente, n))
 }
 
-# Por fim, função para criar uma tabela com todos os CV, incluindo o do BR
-
 join_cv <- function(df_uf, df_br) {
     df_uf %>%
       reduce(bind_rows) %>%
       bind_rows(df_br)
 }
-
-# Aqui uma função para calcular o pna médio para o BR e os UFs
 
 calc_mean_pna <- function(pna_list) {
   pna_list %>%
@@ -57,8 +41,6 @@ calc_mean_pna <- function(pna_list) {
     summarise(pna = mean(pna)) %>%
     arrange(-pna)
 }
-
-# Calcula a proporção de colisões não especificadas por UF
 
 calc_colisao_uf <- function(uf) {
   if (uf == 'BR') {
@@ -73,11 +55,13 @@ calc_colisao_uf <- function(uf) {
   return(proporcao_colisao_uf)
 }
 
-calc_tabela_colisao <- function(){
+calc_tabela_colisao <- function() {
   df <- data.frame(uf = character(), Perc_Col_NE = numeric())
-  tp_colisao <- c('COLISAO', 'COLISAO FRONTAL', 'COLISAO TRASEIRA', 'COLISAO LATERAL',
-                  'COLISAO TRANSVERSAL', 'ENGAVAMENTO')
-  for (uf in lista_uf){
+  tp_colisao <- c(
+    'COLISAO', 'COLISAO FRONTAL', 'COLISAO TRASEIRA', 'COLISAO LATERAL',
+    'COLISAO TRANSVERSAL', 'ENGAVAMENTO'
+  )
+  for (uf in lista_uf) {
     proporcao_colisao_uf <- calc_colisao1(uf)
     df <- df %>% add_row(uf = uf, Perc_Col_NE = proporcao_colisao_uf)
   }

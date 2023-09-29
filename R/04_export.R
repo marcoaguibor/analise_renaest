@@ -1,6 +1,3 @@
-# É bom dedicar uma parte do projeto só para exportar os resultados de forma
-# automática. Todas as funções aqui se baseam no `ggsave`
-
 export_plots <- function(tipo, plot) {
   if (length(plot) == 28) {
     nomes <- paste0(tipo, "_", c("BR", lista_uf))
