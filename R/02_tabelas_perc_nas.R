@@ -62,9 +62,9 @@ calc_tabela_colisao <- function() {
     'COLISAO TRANSVERSAL', 'ENGAVAMENTO'
   )
   for (uf in lista_uf) {
-    proporcao_colisao_uf <- calc_colisao1(uf)
+    proporcao_colisao_uf <- calc_colisao_uf(uf)
     df <- df %>% add_row(uf = uf, Perc_Col_NE = proporcao_colisao_uf)
   }
-  df <- df %>% add_row(uf = 'BR', Perc_Col_NE = calc_colisao1('BR'))
+  df <- df %>% add_row(uf = 'BR', Perc_Col_NE = calc_colisao_uf('BR'))
   return(df)
 }
